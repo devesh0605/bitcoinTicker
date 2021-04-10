@@ -1,5 +1,8 @@
 import 'package:bitcoin_ticker/coin_data.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+GlobalKey globalKey = GlobalKey();
 
 class PriceScreen extends StatefulWidget {
   @override
@@ -8,9 +11,11 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: globalKey,
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
         centerTitle: true,
@@ -40,6 +45,19 @@ class _PriceScreenState extends State<PriceScreen> {
               ),
             ),
           ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     Fluttertoast.showToast(
+          //         msg: "This Toast",
+          //         toastLength: Toast.LENGTH_LONG,
+          //         gravity: ToastGravity.CENTER,
+          //         timeInSecForIosWeb: 1,
+          //         backgroundColor: Colors.red,
+          //         textColor: Colors.white,
+          //         fontSize: 16.0);
+          //   },
+          //   child: Text('For Toast'),
+          // ),
           Container(
             height: 150.0,
             alignment: Alignment.center,

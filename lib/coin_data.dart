@@ -32,9 +32,13 @@ const List<String> cryptoList = [
 ];
 
 class CoinData {
+  CoinData({this.chosenCurrency});
+
+  String chosenCurrency;
+
   Future getCoinData() async {
     var url = Uri.parse(
-        'https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=1276A669-F9A8-46C8-B4E8-7C221795E09D');
+        'https://rest.coinapi.io/v1/exchangerate/BTC/$chosenCurrency?apikey=1276A669-F9A8-46C8-B4E8-7C221795E09D');
     http.Response response = await http.get(url);
     // print('Response status: ${response.statusCode}');
     // print('Response body: ${response.body}');

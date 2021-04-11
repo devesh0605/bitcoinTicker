@@ -13,9 +13,8 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  CoinData coinData = CoinData();
   String bitcoinValueInUSD = '?';
-  String selectedCurrency = 'INR';
+  String selectedCurrency = 'AUD';
   DropdownButton<String> androidDropdown() {
     List<DropdownMenuItem<String>> currencies = [];
     for (String currency in currenciesList) {
@@ -34,6 +33,7 @@ class _PriceScreenState extends State<PriceScreen> {
         setState(
           () {
             selectedCurrency = value;
+            getData(selectedCurrency);
           },
         );
       },
@@ -52,7 +52,10 @@ class _PriceScreenState extends State<PriceScreen> {
       backgroundColor: Colors.lightBlueAccent,
       itemExtent: 32.0,
       onSelectedItemChanged: (selectedIndex) {
-        print(selectedIndex);
+        setState(() {
+          selectedCurrency = currenciesList[selectedIndex];
+          getData(selectedCurrency);
+        });
       },
       children: currencies,
     );
@@ -77,9 +80,9 @@ class _PriceScreenState extends State<PriceScreen> {
         fontSize: 16.0);
   }
 
-  void getData() async {
+  void getData(String currencyNow) async {
     try {
-      double data = await CoinData().getCoinData();
+      double data = await CoinData(chosenCurrency: currencyNow).getCoinData();
       setState(() {
         bitcoinValueInUSD = data.toStringAsFixed(0);
       });
@@ -91,7 +94,7 @@ class _PriceScreenState extends State<PriceScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
+    getData(selectedCurrency);
   }
 
   @override
@@ -119,7 +122,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = $bitcoinValueInUSD USD',
+                  '1 BTC = $bitcoinValueInUSD $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -150,7 +153,8 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlueAccent,
-            child: Platform.isIOS ? iOSPicker() : androidDropdown(),
+            //child: Platform.isIOS ? iOSPicker() : androidDropdown(),
+            child: iOSPicker(),
           ),
         ],
       ),

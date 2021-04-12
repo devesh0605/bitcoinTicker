@@ -38,12 +38,48 @@ class CoinData {
 
   Future getCoinData() async {
     var url = Uri.parse(
-        'https://rest.coinapi.io/v1/exchangerate/BTC/$chosenCurrency?apikey=1276A669-F9A8-46C8-B4E8-7C221795E09D');
+        'https://rest.coinapi.io/v1/exchangerate/BTC/$chosenCurrency?apikey=0CEA4FE5-1E57-4B8B-8298-393DBE7E15CE');
     http.Response response = await http.get(url);
+    print(response.body);
     // print('Response status: ${response.statusCode}');
     // print('Response body: ${response.body}');
     if (response.statusCode == 200) {
       String data = response.body;
+
+      var decodeData = jsonDecode(data);
+      return (decodeData['rate']);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  Future getCoinDataInETH() async {
+    var url = Uri.parse(
+        'https://rest.coinapi.io/v1/exchangerate/ETH/$chosenCurrency?apikey=0CEA4FE5-1E57-4B8B-8298-393DBE7E15CE');
+    http.Response response = await http.get(url);
+    print(response.body);
+    // print('Response status: ${response.statusCode}');
+    // print('Response body: ${response.body}');
+    if (response.statusCode == 200) {
+      String data = response.body;
+
+      var decodeData = jsonDecode(data);
+      return (decodeData['rate']);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  Future getCoinDataInLTC() async {
+    var url = Uri.parse(
+        'https://rest.coinapi.io/v1/exchangerate/LTC/$chosenCurrency?apikey=0CEA4FE5-1E57-4B8B-8298-393DBE7E15CE');
+    http.Response response = await http.get(url);
+    print(response.body);
+    // print('Response status: ${response.statusCode}');
+    // print('Response body: ${response.body}');
+    if (response.statusCode == 200) {
+      String data = response.body;
+
       var decodeData = jsonDecode(data);
       return (decodeData['rate']);
     } else {

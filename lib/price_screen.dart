@@ -13,7 +13,9 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  String bitcoinValueInUSD = '?';
+  String bitcoinValueForBTC = '?';
+  String bitcoinValueForETH = '?';
+  String bitcoinValueForLTC = '?';
   String selectedCurrency = 'AUD';
   DropdownButton<String> androidDropdown() {
     List<DropdownMenuItem<String>> currencies = [];
@@ -33,7 +35,9 @@ class _PriceScreenState extends State<PriceScreen> {
         setState(
           () {
             selectedCurrency = value;
-            getData(selectedCurrency);
+            getDataInBTC(selectedCurrency);
+            getDataInETH(selectedCurrency);
+            getDataInLTC(selectedCurrency);
           },
         );
       },
@@ -54,7 +58,9 @@ class _PriceScreenState extends State<PriceScreen> {
       onSelectedItemChanged: (selectedIndex) {
         setState(() {
           selectedCurrency = currenciesList[selectedIndex];
-          getData(selectedCurrency);
+          getDataInBTC(selectedCurrency);
+          getDataInETH(selectedCurrency);
+          getDataInLTC(selectedCurrency);
         });
       },
       children: currencies,
@@ -80,11 +86,35 @@ class _PriceScreenState extends State<PriceScreen> {
         fontSize: 16.0);
   }
 
-  void getData(String currencyNow) async {
+  void getDataInBTC(String currencyNow) async {
     try {
       double data = await CoinData(chosenCurrency: currencyNow).getCoinData();
       setState(() {
-        bitcoinValueInUSD = data.toStringAsFixed(0);
+        bitcoinValueForBTC = data.toStringAsFixed(0).toString();
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void getDataInETH(String currencyNow) async {
+    try {
+      double data =
+          await CoinData(chosenCurrency: currencyNow).getCoinDataInETH();
+      setState(() {
+        bitcoinValueForETH = data.toStringAsFixed(0).toString();
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void getDataInLTC(String currencyNow) async {
+    try {
+      double data =
+          await CoinData(chosenCurrency: currencyNow).getCoinDataInLTC();
+      setState(() {
+        bitcoinValueForLTC = data.toStringAsFixed(0).toString();
       });
     } catch (e) {
       print(e);
@@ -94,7 +124,9 @@ class _PriceScreenState extends State<PriceScreen> {
   @override
   void initState() {
     super.initState();
-    getData(selectedCurrency);
+    getDataInBTC(selectedCurrency);
+    getDataInETH(selectedCurrency);
+    getDataInLTC(selectedCurrency);
   }
 
   @override
@@ -113,23 +145,67 @@ class _PriceScreenState extends State<PriceScreen> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  '1 BTC = $bitcoinValueInUSD $selectedCurrency',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Card(
+                  color: Colors.lightBlueAccent,
+                  elevation: 5.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+                    child: Text(
+                      '1 BTC = $bitcoinValueForBTC $selectedCurrency',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Card(
+                  color: Colors.lightBlueAccent,
+                  elevation: 5.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+                    child: Text(
+                      '1 ETH = $bitcoinValueForETH $selectedCurrency',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  color: Colors.lightBlueAccent,
+                  elevation: 5.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+                    child: Text(
+                      '1 LTC = $bitcoinValueForLTC $selectedCurrency',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           // Expanded(
@@ -154,7 +230,7 @@ class _PriceScreenState extends State<PriceScreen> {
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlueAccent,
             //child: Platform.isIOS ? iOSPicker() : androidDropdown(),
-            child: iOSPicker(),
+            child: androidDropdown(),
           ),
         ],
       ),
